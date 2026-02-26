@@ -4,605 +4,574 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>cfm-miku-en</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #000;
+    --bg2: #0a0a0f;
+    --bg3: #0d0d1a;
+    --cyan: #00fff5;
+    --blue: #00aaff;
+    --blue2: #0055cc;
+    --yellow: #f5c400;
+    --white: #d0e8ff;
+    --dim: #3a5a7a;
+    --border: #004488;
+  }
 
-:root {
-    --teal: #39d9c8;
-    --bg: #0b0c10;
-    --surface: #0f1018;
-    --surface2: #14151f;
-    --border: rgba(255,255,255,0.07);
-    --text: #b8bcd8;
-    --text-dim: #4a4e66;
-    --white: #e8eaff;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: 'DM Mono', monospace;
+  body {
     background: var(--bg);
-    color: var(--text);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
     min-height: 100vh;
-    overflow-x: hidden;
-}
+  }
 
-body::after {
+  body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background:
-        radial-gradient(ellipse 70% 55% at 90% 5%, rgba(57,217,200,0.045) 0%, transparent 55%),
-        radial-gradient(ellipse 45% 65% at 5% 95%, rgba(80,50,200,0.035) 0%, transparent 55%);
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
     pointer-events: none;
-    z-index: 0;
-}
+    z-index: 9999;
+  }
 
-nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 3rem;
-    background: rgba(11,12,16,0.9);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-}
-
-.nav-logo {
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    color: var(--teal);
-    font-weight: 400;
-}
-
-.nav-links { display: flex; gap: 2.5rem; align-items: center; }
-
-.nav-links a {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    text-decoration: none;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.15s;
-}
-
-.nav-links a:hover { color: var(--text); }
-
-.mode-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    padding: 0.38rem 0.85rem;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: border-color 0.15s, color 0.15s;
-}
-
-.mode-btn:hover { border-color: rgba(57,217,200,0.4); color: var(--teal); }
-
-section {
-    position: absolute;
-    top: 0; left: 0;
+  #header {
+    position: relative;
     width: 100%;
-    min-height: 100vh;
-    padding: 8rem 3rem 5rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease;
-    z-index: 1;
-}
-
-section.active { opacity: 1; pointer-events: all; }
-
-.home-grid {
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 6rem;
-    align-items: start;
-    max-width: 1020px;
-    margin: 4rem auto 0;
-}
-
-.eyebrow {
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 1.6rem;
-}
-
-.home-name {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 400;
-    line-height: 0.95;
-    color: var(--white);
-    letter-spacing: -0.02em;
-    margin-bottom: 2rem;
-}
-
-.home-name em {
-    font-style: italic;
-    color: var(--teal);
-}
-
-.home-desc {
-    font-size: 0.78rem;
-    line-height: 2;
-    color: var(--text-dim);
-    max-width: 380px;
-    margin-bottom: 2.5rem;
-}
-
-.langs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
-.lang-tag {
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
-    padding: 0.25rem 0.65rem;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    border-radius: 2px;
-}
-
-.sidebar { display: flex; flex-direction: column; gap: 1px; }
-
-.avatar-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 3px 3px 0 0;
-    padding: 1.5rem 1.6rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.avatar-block img {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: 1px solid rgba(57,217,200,0.2);
-    flex-shrink: 0;
-}
-
-.avatar-name {
-    font-size: 0.88rem;
-    color: var(--white);
-    margin-bottom: 0.25rem;
-    letter-spacing: 0.02em;
-}
-
-.avatar-sub {
-    font-size: 0.62rem;
-    color: var(--text-dim);
-}
-
-.info-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-top: none;
-    padding: 0.2rem 1.6rem;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.62rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.035);
-}
-
-.info-row:last-child { border-bottom: none; }
-
-.info-label {
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-}
-
-.info-val {
-    font-size: 0.72rem;
-    color: var(--text);
-}
-
-.info-val.teal { color: var(--teal); }
-.info-val.dim { color: var(--text-dim); font-style: italic; font-size: 0.68rem; }
-
-.osu-failed-row {
-    display: none;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.62rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.035);
-}
-
-.osu-failed-row.visible { display: flex; }
-
-.info-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    padding: 0.18rem 0.5rem;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: border-color 0.15s, color 0.15s;
-    position: relative;
-}
-
-.info-btn:hover { border-color: rgba(57,217,200,0.4); color: var(--teal); }
-
-.info-popup {
-    display: none;
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 6px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.55rem 0.85rem;
-    font-size: 0.62rem;
-    color: var(--text-dim);
-    white-space: nowrap;
-    z-index: 10;
-    pointer-events: none;
-}
-
-.info-popup::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    right: 10px;
-    width: 8px;
-    height: 8px;
-    background: var(--surface2);
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    transform: rotate(45deg);
-}
-
-.info-btn:hover .info-popup { display: block; }
-
-.octo-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-top: none;
-    border-radius: 0 0 3px 3px;
-    padding: 1.1rem 1.6rem;
-}
-
-.octo-label {
-    font-size: 0.58rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 0.65rem;
-}
-
-.octo-nav {
-    display: flex;
-    gap: 0.4rem;
-    margin-bottom: 0.6rem;
-}
-
-.octo-nav a {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.4rem;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    text-decoration: none;
-    transition: border-color 0.15s, color 0.15s;
-}
-
-.octo-nav a:hover { border-color: rgba(57,217,200,0.35); color: var(--teal); }
-
-.octo-footer { font-size: 0.58rem; color: var(--text-dim); }
-.octo-footer a { color: var(--text-dim); text-decoration: none; }
-.octo-footer a:hover { color: var(--text); }
-
-#projects {
-    max-width: 1020px;
-    margin: 0 auto;
-}
-
-.section-header { margin-bottom: 3rem; }
-
-.section-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(3rem, 5vw, 5rem);
-    font-weight: 400;
-    color: var(--white);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-top: 0.5rem;
-}
-
-.section-title em {
-    font-style: italic;
-    color: var(--teal);
-}
-
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 3px;
+    height: 337px;
     overflow: hidden;
-}
+    border-bottom: 3px solid var(--cyan);
+    background: #000;
+  }
 
-.project-card {
-    background: var(--surface);
-    padding: 1.8rem;
-    text-decoration: none;
-    color: inherit;
+  #banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    opacity: 0.85;
+    display: block;
+  }
+
+  #corner-img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 337px;
+    width: auto;
+    z-index: 10;
+    image-rendering: auto;
+  }
+
+  #site-title {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-family: 'VT323', monospace;
+    font-size: 38px;
+    color: var(--cyan);
+    text-shadow: none;
+    letter-spacing: 3px;
+    z-index: 10;
+  }
+
+  #binary-bg {
+    position: absolute;
+    inset: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(0,170,255,0.12);
+    overflow: hidden;
+    line-height: 1.4;
+    padding: 4px;
+    pointer-events: none;
+    z-index: 1;
+    word-break: break-all;
+  }
+
+  #nav {
+    background: var(--bg3);
+    border-bottom: 2px solid var(--border);
+    padding: 0;
     display: flex;
-    flex-direction: column;
-    transition: background 0.15s;
-    position: relative;
-    min-height: 220px;
-}
+    gap: 0;
+  }
 
-.project-card:hover { background: var(--surface2); }
+  #nav a {
+    display: inline-block;
+    padding: 8px 18px;
+    color: var(--cyan);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    border-right: 1px solid var(--border);
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
 
-.project-num {
-    font-size: 0.58rem;
-    color: var(--text-dim);
-    letter-spacing: 0.14em;
-    margin-bottom: auto;
-    padding-bottom: 2rem;
-}
+  #nav a:hover, #nav a.active {
+    background: var(--blue2);
+    color: #fff;
+  }
 
-.project-name {
-    font-family: 'Instrument Serif', serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--white);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-}
+  #layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: calc(100vh - 185px);
+    border-top: 1px solid var(--border);
+  }
 
-.project-desc {
-    font-size: 0.7rem;
-    color: var(--text-dim);
+  #sidebar {
+    background: var(--bg2);
+    border-right: 2px solid var(--border);
+    padding: 12px 10px;
+  }
+
+  .sidebar-section {
+    margin-bottom: 16px;
+  }
+
+  .sidebar-title {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--yellow);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-section ul {
+    list-style: none;
+    padding-left: 6px;
+  }
+
+  .sidebar-section ul li::before {
+    content: '• ';
+    color: var(--cyan);
+  }
+
+  .sidebar-section ul li a {
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .sidebar-section ul li a:hover {
+    color: var(--cyan);
+    text-decoration: underline;
+  }
+
+
+
+  #main {
+    padding: 20px 24px;
+    background: var(--bg);
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-title {
+    font-family: 'VT323', monospace;
+    font-size: 32px;
+    color: var(--cyan);
+    text-shadow: none;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+  }
+
+  .welcome-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--cyan);
+    padding: 16px 18px;
     line-height: 1.8;
-    margin-bottom: 1.4rem;
-    flex: 1;
-}
+    margin-bottom: 16px;
+    color: var(--white);
+  }
 
-.project-link {
-    font-size: 0.6rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    display: inline-flex;
+  .welcome-box p { margin-bottom: 10px; }
+  .welcome-box p:last-child { margin-bottom: 0; }
+
+  .tag {
+    display: inline-block;
+    background: var(--blue2);
+    color: var(--cyan);
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 2px;
+    margin: 2px;
+  }
+
+  .hw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .hw-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .hw-label {
+    color: var(--cyan);
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .project-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--cyan);
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .project-card:hover {
+    border-color: var(--blue);
+    border-top-color: var(--blue);
+    box-shadow: 0 0 20px rgba(0,170,255,0.15);
+  }
+
+  .project-name {
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+
+  .project-desc {
+    color: var(--white);
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .project-langs {
+    margin-bottom: 12px;
+  }
+
+  .lang-tag {
+    display: inline-block;
+    background: #001133;
+    border: 1px solid var(--blue2);
+    color: var(--blue);
+    padding: 2px 7px;
+    font-size: 11px;
+    margin: 2px;
+    border-radius: 2px;
+  }
+
+  .project-buttons {
+    display: none;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .project-card:hover .project-buttons {
+    display: flex;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    text-decoration: none;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-cyan {
+    background: transparent;
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .btn-cyan:hover {
+    background: var(--cyan);
+    color: #000;
+  }
+
+  .btn-blue {
+    background: transparent;
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  .btn-blue:hover {
+    background: var(--blue);
+    color: #000;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 14px;
+  }
+
+  .info-box-title {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--yellow);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(0,68,136,0.3);
+    font-size: 12px;
+  }
+
+  .info-key { color: var(--cyan); }
+  .info-val { color: var(--white); text-align: right; }
+
+  .credit-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+
+  .credit-item a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  .credit-item a:hover { text-decoration: underline; }
+
+  .credit-type {
+    color: var(--dim);
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  #footer {
+    background: var(--bg3);
+    border-top: 2px solid var(--border);
+    padding: 8px 16px;
+    font-size: 11px;
+    color: var(--dim);
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.15s, transform 0.15s, color 0.15s;
-}
+  }
 
-.project-card:hover .project-link {
-    opacity: 1;
-    transform: translateY(0);
-    color: var(--teal);
-}
+  #footer span { color: var(--cyan); }
 
-.project-link::after { content: '↗'; }
 
-body.light {
-    --bg: #f4f4f8;
-    --surface: #ebebf2;
-    --surface2: #e2e2ec;
-    --border: rgba(0,0,0,0.07);
-    --text: #3a3c52;
-    --text-dim: #9090b0;
-    --white: #0f1018;
-}
-
-body.light nav { background: rgba(244,244,248,0.92); }
-
-@media (max-width: 860px) {
-    nav { padding: 1.1rem 1.5rem; }
-    section { padding: 6rem 1.5rem 3rem; }
-    .home-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .sidebar { max-width: 400px; }
-    .projects-grid { grid-template-columns: 1fr; }
-}
 </style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-logo">cfm-miku-en</div>
-    <div class="nav-links">
-        <a onclick="swapSection('home')">Home</a>
-        <a onclick="swapSection('projects')">Projects</a>
-        <button class="mode-btn" id="modeToggle">light</button>
-    </div>
-</nav>
+<div id="header">
+  <div id="binary-bg" id="binarybg"></div>
+  <img id="banner" src="https://i.ibb.co/YBq4fd0Y/firefox-HZ2w-N8-U5i-F.png" alt="banner">
+  <img id="corner-img" src="https://i.ibb.co/k6JKqZ4J/Miku-01-prsk-erica-moe.png" alt="Miku">
+  <div id="site-title">cfm-miku-en</div>
+</div>
 
-<section id="home" class="active">
-    <div class="home-grid">
-        <div class="home-left">
-            <div class="eyebrow">developer — mi/ku</div>
-            <h1 class="home-name">cfm<br><em>miku-en</em></h1>
-            <p class="home-desc">
-                coding stuff and breaking things.<br>
-                android rooting on the side (F google).<br>
-                osu! player also i suck
-            </p>
-            <div class="langs">
-                <span class="lang-tag">JavaScript</span>
-                <span class="lang-tag">Python</span>
-                <span class="lang-tag">C++</span>
-                <span class="lang-tag">C#</span>
-                <span class="lang-tag">HTML / CSS</span>
-                <span class="lang-tag">HBS</span>
-            </div>
+<div id="nav">
+  <a class="active" onclick="showPage('home',this)">[ home ]</a>
+  <a onclick="showPage('projects',this)">[ projects ]</a>
+  <a onclick="showPage('about',this)">[ about ]</a>
+  <a onclick="showPage('credits',this)">[ credits ]</a>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Navigation</div>
+      <ul>
+        <li><a onclick="showPage('home',null)">Home</a></li>
+        <li><a onclick="showPage('projects',null)">Projects</a></li>
+        <li><a onclick="showPage('about',null)">About</a></li>
+        <li><a onclick="showPage('credits',null)">Credits</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Links</div>
+      <ul>
+        <li><a href="https://github.com/cfm-miku-en" target="_blank">GitHub</a></li>
+        <li><a href="https://maniac.dvsgolf.com/" target="_blank">maniac-next site</a></li>
+      </ul>
+    </div>
+
+
+  </div>
+
+  <div id="main">
+
+    <div class="page active" id="page-home">
+      <div class="page-title">&gt; welcome_</div>
+      <div class="welcome-box">
+        <p>hey, i'm <span style="color:var(--cyan)">cfm-miku-en</span>. i occasionally make random repositories, or i play osu!, or i do whatever.</p>
+        <p>i like fries.</p>
+        <p style="color:var(--dim); font-size:12px;">// best viewed with a internet connection</p>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <div class="page-title" style="font-size:22px;">&gt; langs_</div>
+        <div>
+          <span class="tag">C++</span>
+          <span class="tag">Python</span>
+          <span class="tag">C#</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">Rust</span>
+          <span class="tag">C</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-projects">
+      <div class="page-title">&gt; projects_</div>
+
+      <div class="project-card">
+        <div class="project-name">maniac-next</div>
+        <div class="project-desc">osu cheat for mania!</div>
+        <div class="project-langs">
+          <span class="lang-tag">C++</span>
+          <span class="lang-tag">Python</span>
+          <span class="lang-tag">C#</span>
+          <span class="lang-tag">JavaScript</span>
+          <span class="lang-tag">CSS</span>
+          <span class="lang-tag">HTML</span>
+        </div>
+        <div class="project-buttons">
+          <a class="btn btn-cyan" href="https://maniac.dvsgolf.com/" target="_blank">🌐 website</a>
+          <a class="btn btn-blue" href="https://github.com/cfm-miku-en/maniac-next" target="_blank">&lt;/&gt; source</a>
+        </div>
+        <div style="color:var(--dim);font-size:11px;margin-top:8px;">hover to reveal links ↑</div>
+      </div>
+
+      <div style="color:var(--dim);font-size:12px;padding:8px;">// more projects on <a href="https://github.com/cfm-miku-en" target="_blank" style="color:var(--blue)">github.com/cfm-miku-en</a></div>
+    </div>
+
+    <div class="page" id="page-about">
+      <div class="page-title">&gt; about_</div>
+
+      <div class="about-grid">
+        <div class="info-box">
+          <div class="info-box-title">// who</div>
+          <div class="info-row"><span class="info-key">alias</span><span class="info-val">cfm-miku-en</span></div>
+          <div class="info-row"><span class="info-key">hobby</span><span class="info-val">coding & osu!</span></div>
+          <div class="info-row"><span class="info-key">fav game</span><span class="info-val">osu!</span></div>
+          <div class="info-row"><span class="info-key">art software</span><span class="info-val">Krita</span></div>
+          <div class="info-row"><span class="info-key">OS</span><span class="info-val">Windows 11</span></div>
         </div>
 
-        <div class="sidebar">
-            <div class="avatar-block">
-                <img src="https://avatars.githubusercontent.com/u/140653023?v=4" alt="cfm-miku-en">
-                <div>
-                    <div class="avatar-name">cfm-miku-en</div>
-                    <div class="avatar-sub">github.com/cfm-miku-en</div>
-                </div>
-            </div>
-
-            <div class="info-block">
-                <div class="info-row">
-                    <span class="info-label">IDE</span>
-                    <span class="info-val">VS / VS Code</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Hobbies</span>
-                    <span class="info-val">android rooting, coding</span>
-                </div>
-                <div class="info-row" id="osuRankRow">
-                    <span class="info-label">osu! rank</span>
-                    <span class="info-val teal dim" id="osuRank">fetching...</span>
-                </div>
-                <div class="info-row" id="osuPPRow">
-                    <span class="info-label">osu! pp</span>
-                    <span class="info-val dim" id="osuPP">—</span>
-                </div>
-                <div class="info-row" id="osuAccRow">
-                    <span class="info-label">osu! acc</span>
-                    <span class="info-val dim" id="osuAcc">—</span>
-                </div>
-                <div class="osu-failed-row" id="osuFailedRow">
-                    <span class="info-label">osu!</span>
-                    <button class="info-btn">
-                        info
-                        <div class="info-popup">osu stuff cannot show, probably a ratelimit</div>
-                    </button>
-                </div>
-            </div>
-
-            <div class="octo-block">
-                <div class="octo-label">octo-ring</div>
-                <div class="octo-nav">
-                    <a href="https://octo-ring.com/p/cfm-miku-en/prev">prev</a>
-                    <a href="https://octo-ring.com/p/cfm-miku-en/random">random</a>
-                    <a href="https://octo-ring.com/p/cfm-miku-en/next">next</a>
-                </div>
-                <div class="octo-footer">
-                    <a href="https://octo-ring.com/">octo-ring.com</a> — a webring of github profiles
-                </div>
-            </div>
+        <div class="info-box">
+          <div class="info-box-title">// hardware</div>
+          <div class="info-row"><span class="info-key">tablet</span><span class="info-val">CTL 480</span></div>
+          <div class="info-row"><span class="info-key">keyboard</span><span class="info-val">Ornata V3X</span></div>
+          <div class="info-row"><span class="info-key">GPU</span><span class="info-val">EVGA XC Black RTX 2070</span></div>
+          <div class="info-row"><span class="info-key">CPU</span><span class="info-val">Ryzen 7 5700X</span></div>
+          <div class="info-row"><span class="info-key">RAM</span><span class="info-val">32GB DDR4</span></div>
         </div>
-    </div>
-</section>
+      </div>
 
-<section id="projects">
-    <div class="section-header">
-        <div class="eyebrow">my work</div>
-        <h2 class="section-title"><em>Pro</em>jects</h2>
+      <div class="info-box" style="margin-bottom:16px;">
+        <div class="info-box-title">// languages</div>
+        <div style="padding-top:6px;">
+          <span class="tag">C++</span>
+          <span class="tag">Python</span>
+          <span class="tag">C#</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">Rust</span>
+          <span class="tag">C</span>
+        </div>
+      </div>
     </div>
-    <div class="projects-grid">
-        <a class="project-card" href="https://maniac.dvsgolf.com/" target="_blank">
-            <span class="project-num">01 / maniac-next</span>
-            <div class="project-name">Maniac Next</div>
-            <div class="project-desc">simple cheat for osu! mania. keys keys.</div>
-            <div class="project-link">visit site</div>
-        </a>
-        <a class="project-card" href="http://mikoto.dvsgolf.com/" target="_blank">
-            <span class="project-num">02 / countdown</span>
-            <div class="project-name">GTA 6 vs Mikoto</div>
-            <div class="project-desc">what comes out first. idk. your mom..</div>
-            <div class="project-link">visit site</div>
-        </a>
-        <a class="project-card" href="https://imagic.dvsgolf.com/" target="_blank">
-            <span class="project-num">03 / imagic</span>
-            <div class="project-name">Imagic</div>
-            <div class="project-desc">stupid image converter. converts images. stupidly.</div>
-            <div class="project-link">visit site</div>
-        </a>
+
+    <div class="page" id="page-credits">
+      <div class="page-title">&gt; credits_</div>
+
+      <div class="credit-item">
+        <div class="credit-type">// corner image</div>
+        <div>art from <strong style="color:var(--white)">Project Sekai: Colorful Stage!</strong></div>
+        <div style="font-size:12px;color:var(--dim);margin-top:4px;">feat. Hatsune Miku — SEGA / Colorful Palette</div>
+      </div>
+
+      <div class="credit-item">
+        <div class="credit-type">// banner image</div>
+        <div>art by <a href="https://anya_desdein.artstation.com/" target="_blank">anya-desdein</a> on ArtStation</div>
+      </div>
+
+      <div class="credit-item">
+        <div class="credit-type">// site</div>
+        <div>built by <span style="color:var(--cyan)">cfm-miku-en</span> — bro</div>
+      </div>
     </div>
-</section>
+
+  </div>
+</div>
+
+<div id="footer">
+  <div>cfm-miku-en &copy; 2025 — <span>boob</span></div>
+  <div><a href="https://github.com/cfm-miku-en" target="_blank" style="color:var(--blue);text-decoration:none;">github.com/cfm-miku-en</a></div>
+</div>
 
 <script>
-let current = 'home';
+  const bb = document.getElementById('binary-bg');
+  let s = '';
+  for(let i=0;i<2000;i++) s += Math.round(Math.random());
+  bb.textContent = s;
 
-function swapSection(id) {
-    const prev = document.getElementById(current);
-    const next = document.getElementById(id);
-    prev.style.opacity = 0;
-    setTimeout(() => {
-        prev.classList.remove('active');
-        next.classList.add('active');
-        next.style.opacity = 0;
-        setTimeout(() => { next.style.opacity = 1; }, 30);
-    }, 220);
-    current = id;
-}
-
-document.getElementById('modeToggle').addEventListener('click', function() {
-    document.body.classList.toggle('light');
-    this.textContent = document.body.classList.contains('light') ? 'dark' : 'light';
-});
-
-function showOsuFailed() {
-    document.getElementById('osuRankRow').style.display = 'none';
-    document.getElementById('osuPPRow').style.display = 'none';
-    document.getElementById('osuAccRow').style.display = 'none';
-    document.getElementById('osuFailedRow').classList.add('visible');
-}
-
-async function fetchOsuRank() {
-    try {
-        const res = await fetch('https://osu-proxy.aidenjd205.workers.dev');
-        if (!res.ok) throw new Error('bad response');
-
-        const data = await res.json();
-
-        if (data.rank === undefined && data.pp === undefined && data.acc === undefined) throw new Error('empty');
-
-        const rankEl = document.getElementById('osuRank');
-        const ppEl = document.getElementById('osuPP');
-        const accEl = document.getElementById('osuAcc');
-
-        rankEl.textContent = data.rank ? '#' + data.rank.toLocaleString() : 'unranked';
-        rankEl.classList.remove('dim');
-
-        ppEl.textContent = data.pp ? Math.round(data.pp).toLocaleString() + 'pp' : '—';
-        ppEl.classList.remove('dim');
-
-        accEl.textContent = data.acc ? data.acc.toFixed(2) + '%' : '—';
-        accEl.classList.remove('dim');
-
-    } catch (e) {
-        showOsuFailed();
+  function showPage(id, navEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('#nav a').forEach(a => a.classList.remove('active'));
+    if(navEl) navEl.classList.add('active');
+    else {
+      document.querySelectorAll('#nav a').forEach(a => {
+        if(a.getAttribute('onclick') && a.getAttribute('onclick').includes(id)) a.classList.add('active');
+      });
     }
-}
+  }
 
-fetchOsuRank();
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const hint = card.querySelector('div[style*="hint"]');
+      if(hint) hint.style.display = 'none';
+    });
+  });
 </script>
 </body>
 </html>
